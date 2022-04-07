@@ -8,17 +8,51 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
         function App() { // component
-            const [ minutes, setMinutes ] = React.useState(0); // default 0
+            const [ amount, setAmount ] = React.useState(0); // default 0
+            const [ flipped, setFlipped ] = React.useState(false);
+            // flipped가 false라면 disabled는 true가 되어야함
+            console.log(flipped);
+            
             const onChange = (event) => {
-                setMinutes(event.target.value);
+                setAmount(event.target.value);
             };
+
+            const reset = () => setAmount(0); // 0으로 reset
+            const onFlip = () => {
+                reset();
+                setFlipped((current) => !current);
+                // flip button을 눌렀을 때 state를 정반대의 값으로 바꿈
+                console.log(flipped);
+            }
+
             return (<div>
                 <h3>Super Converter</h3>
-                <label for="minutes">Minutes</label>
-                <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange}/>
-                <h4>You want to convert {minutes}</h4>
-                <label for="hours">Hours</label>
-                <input id="hours" placeholder="hours" type="number" />
+                <div>
+                    <label for="minutes">Minutes</label>
+                    <input
+                        value={flipped ? amount * 60 : amount}
+                        id="minutes"
+                        placeholder="Minutes"
+                        type="number"
+                        onChange={onChange}
+                        disabled={flipped}
+                    />
+                    <h4>You want to convert {amount}</h4>
+                </div>
+
+                <div>
+                    <label for="hours">Hours</label>
+                    <input
+                        value={flipped ? amount : Math.floor(amount / 60)}
+                        id="hours"
+                        placeholder="hours"
+                        type="number"
+                        onChange={onChange}
+                        disabled={!flipped} // flipped가 false라면 disabled는 true가 됨
+                    />
+                </div>
+                <button onClick={reset}>Reset</button>
+                <button onClick={onFlip}>Flip</button>
             </div>);
         };
         const root = document.getElementById("root");
