@@ -7,30 +7,21 @@
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        const root = document.getElementById("root");
-        let counter = 0;
-        function countUp() {
-            counter = counter + 1;
-            render();
-        };
-        function render() {
-            ReactDOM.render(<Container />, root);
-        };
-
-        // div tag rendering function
-        const Container = () => ( // component의 첫 글자는 uppercase!
-            <div>
-                <h3>Total clicks: {counter}</h3>
-                <button onClick={countUp}>Click Me</button>
+        function App() { // component
+            const [ minutes, setMinutes ] = React.useState(0); // default 0
+            const onChange = (event) => {
+                setMinutes(event.target.value);
+            };
+            return (<div>
+                <h3>Super Converter</h3>
+                <label for="minutes">Minutes</label>
+                <input value={minutes} id="minutes" placeholder="Minutes" type="number" onChange={onChange}/>
+                <h4>You want to convert {minutes}</h4>
+                <label for="hours">Hours</label>
+                <input id="hours" placeholder="hours" type="number" />
             </div>);
-
-        // function Container() {
-        //     return (<div>
-        //         <h3>Total clicks: {counter}</h3>
-        //         <button onClick={countUp}>Click Me</button>
-        //     </div>);
-        // };
-
-        render();
+        };
+        const root = document.getElementById("root");
+        ReactDOM.render(<App />, root);
     </script>
 </html>
