@@ -7,171 +7,34 @@
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        function MinutesToHours() {
-            const [amount, setAmount] = React.useState(0);
-            const [inverted, setInverted] = React.useState(false);
-            
-            const onChange = (event) => {
-                setAmount(event.target.value);
-                // console.log(event.target.value);
-            };
-
-            const reset = () => setAmount(0);
-
-            const onInvert = () => {
-                reset();
-                setInverted((current) => !current);
-            };
-
-            return (<div>
-                <div>
-                    <label for="minutes">Minutes</label>
-                    <input
-                        value={inverted ? amount * 60 : amount}
-                        id="minutes"
-                        placeholder="Minutes"
-                        type="number"
-                        onChange={onChange}
-                        disabled={inverted}
-                    />
-                </div>
-
-                <div>
-                    <label for="hours">Hours</label>
-                    <input
-                        value={inverted ? amount : Math.floor(amount / 60)}
-                        id="hours"
-                        placeholder="Hours"
-                        type="number"
-                        onChange={onChange}
-                        disabled={!inverted}
-                    />
-                </div>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
-            </div>);
+        // function Btn(props) {
+        function Btn({ text, changeValue }) {
+            // console.log(text); // object
+            console.log(text, "was rendered");
+            return <button 
+                onClick={changeValue} // event listener
+                style={{
+                backgroundColor: "tomato",
+                color: "white",
+                padding: "10px 20px",
+                border: 0,
+                borderRadius: 10,
+            // }}>{props.text}</button>
+            }}>{text}</button>
         };
+        const MemorizedBtn = React.memo(Btn);
 
-        function KmToMiles() {
-            const [amount, setAmount] = React.useState(0);
-            const [inverted, setInverted] = React.useState(false);
-
-            function reset() {
-                setAmount(0); // 0으로 reset
-            };
-
-            function onChange(event) {
-                setAmount(event.target.value);
-                // console.log(event.target.value);
-            };
-            
-            function onInvert() {
-                reset();
-                setInverted((current) => !current);
-                // setInverted(!inverted);
-            };
-
-            return (<div>
-                <div>
-                    <label for="km">Km</label>
-                    <input 
-                        value={inverted ? amount * 1.609 : amount}
-                        id="km"
-                        placeholder="Km"
-                        type="number"
-                        onChange={onChange}
-                        disabled={inverted}
-                    />
-                </div>
-
-                <div>
-                    <label for="miles">Miles</label>
-                    <input
-                        value={inverted ? amount : amount / 1.609}
-                        id="miles"
-                        placeholder="Miles"
-                        type="number"
-                        onChange={onChange}
-                        disabled={!inverted}
-                    />
-                </div>
-                <button onClick={reset}>Reset</button>
-                <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
-            </div>);
-        };
-
-        function App() { // 컴포넌트 안에 다른 컴포넌트를 렌더링
-            // const [index, setIndex] = React.useState("0"); // default state "0"
-            const [index, setIndex] = React.useState("xx");
-            const onSelect = (event) => {
-                // console.log(event.target.value);
-                setIndex(event.target.value);
-            };
-            console.log("render w/", index);
-
+        function App() {
+            const [value, setValue] = React.useState("Save Changes");
+            const changeValue = () => setValue("Revert Changes");
             return (
                 <div>
-                    <h1>Super Converter</h1>
-                    <select value={index} onChange={onSelect}>
-                        <option value="xx">Select your units</option>
-                        <option value="0">Minutes & Hours</option>
-                        <option value="1">Km & Miles</option>
-                    </select>
-                <hr />
-                {index === "xx" ? "Please select your units" : null}
-                {index === "0" ? <MinutesToHours /> : null}
-                {index === "1" ? <KmToMiles /> : null}
-                </div>
+                    <MemorizedBtn text={value} changeValue={changeValue} />
+                    <MemorizedBtn text="Continue" />
+                </div> // changeValue은 여기서는 이벤트리스너가 아님! text든 changeValue든 단지 props임
             );
         };
 
-        // function App() { // component
-        //     const [ amount, setAmount ] = React.useState(0); // default 0
-        //     const [ inverted, setInverted ] = React.useState(false);
-        //     // inverted가 false라면 disabled는 true가 되어야함
-        //     console.log(inverted);
-            
-        //     const onChange = (event) => {
-        //         setAmount(event.target.value);
-        //     };
-
-        //     const reset = () => setAmount(0); // 0으로 reset
-        //     const onInvert = () => {
-        //         reset();
-        //         setInverted((current) => !current);
-        //         // flip button을 눌렀을 때 state를 정반대의 값으로 바꿈
-        //         // console.log(flipped);
-        //     }
-
-        //     return (<div>
-        //         <h3>Super Converter</h3>
-        //         <div>
-        //             <label for="minutes">Minutes</label>
-        //             <input
-        //                 value={inverted ? amount * 60 : amount}
-        //                 id="minutes"
-        //                 placeholder="Minutes"
-        //                 type="number"
-        //                 onChange={onChange}
-        //                 disabled={inverted}
-        //             />
-        //         </div>
-
-        //         <div>
-        //             <label for="hours">Hours</label>
-        //             <input
-        //                 value={inverted ? amount : Math.floor(amount / 60)}
-        //                 id="hours"
-        //                 placeholder="hours"
-        //                 type="number"
-        //                 onChange={onChange}
-        //                 disabled={!inverted} // inverted가 false라면 disabled는 true가 됨
-        //             />
-        //         </div>
-        //         <button onClick={reset}>Reset</button>
-        //         <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
-        //     </div>);
-        // };
         const root = document.getElementById("root");
         ReactDOM.render(<App />, root);
     </script>
