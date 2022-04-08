@@ -7,54 +7,149 @@
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        function App() { // component
-            const [ amount, setAmount ] = React.useState(0); // default 0
-            const [ flipped, setFlipped ] = React.useState(false);
-            // flipped가 false라면 disabled는 true가 되어야함
-            console.log(flipped);
+        function MinutesToHours() {
+            const [amount, setAmount] = React.useState(0);
+            const [inverted, setInverted] = React.useState(false);
             
             const onChange = (event) => {
                 setAmount(event.target.value);
+                // console.log(event.target.value);
             };
 
-            const reset = () => setAmount(0); // 0으로 reset
-            const onFlip = () => {
+            const reset = () => setAmount(0);
+            const onInvert = () => {
                 reset();
-                setFlipped((current) => !current);
-                // flip button을 눌렀을 때 state를 정반대의 값으로 바꿈
-                console.log(flipped);
+                setInverted((current) => !current);
             }
 
             return (<div>
-                <h3>Super Converter</h3>
                 <div>
                     <label for="minutes">Minutes</label>
                     <input
-                        value={flipped ? amount * 60 : amount}
+                        value={inverted ? amount * 60 : amount}
                         id="minutes"
                         placeholder="Minutes"
                         type="number"
                         onChange={onChange}
-                        disabled={flipped}
+                        disabled={inverted}
                     />
-                    <h4>You want to convert {amount}</h4>
                 </div>
 
                 <div>
                     <label for="hours">Hours</label>
                     <input
-                        value={flipped ? amount : Math.floor(amount / 60)}
+                        value={inverted ? amount : Math.floor(amount / 60)}
                         id="hours"
                         placeholder="hours"
                         type="number"
                         onChange={onChange}
-                        disabled={!flipped} // flipped가 false라면 disabled는 true가 됨
+                        disabled={!inverted}
                     />
                 </div>
                 <button onClick={reset}>Reset</button>
-                <button onClick={onFlip}>Flip</button>
+                <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
             </div>);
         };
+
+        function KmToMiles() {
+            const [amount, setAmount] = React.useState(0);
+            const [inverted, setInverted] = React.useState(false);
+
+            const reset = () => setAmount(0);
+
+            function onChange(event) {
+                setAmount(event.target.value);
+            };
+            
+            function onInvert() {
+                reset();
+                setInverted((current) => !current);
+            };
+
+            return (<div>
+                <div>
+                    <label>
+                    <input 
+                        value={}
+                        
+                    />
+                    </label>
+                </div>
+            </div>);
+        };
+
+        function App() { // 컴포넌트 안에 다른 컴포넌트를 렌더링
+            // const [index, setIndex] = React.useState("0"); // default state "0"
+            const [index, setIndex] = React.useState("xx");
+            const onSelect = (event) => {
+                // console.log(event.target.value);
+                setIndex(event.target.value);
+            };
+            console.log("render w/", index);
+
+            return (
+                <div>
+                    <h1>Super Converter</h1>
+                    <select value={index} onChange={onSelect}>
+                        <option value="xx">Select your units</option>
+                        <option value="0">Minutes & Hours</option>
+                        <option value="1">Km & Miles</option>
+                    </select>
+                <hr />
+                {index === "xx" ? "Please select your units" : null}
+                {index === "0" ? <MinutesToHours /> : null}
+                {index === "1" ? <KmToMiles /> : null}
+                </div>
+            );
+        };
+
+        // function App() { // component
+        //     const [ amount, setAmount ] = React.useState(0); // default 0
+        //     const [ inverted, setInverted ] = React.useState(false);
+        //     // inverted가 false라면 disabled는 true가 되어야함
+        //     console.log(inverted);
+            
+        //     const onChange = (event) => {
+        //         setAmount(event.target.value);
+        //     };
+
+        //     const reset = () => setAmount(0); // 0으로 reset
+        //     const onInvert = () => {
+        //         reset();
+        //         setInverted((current) => !current);
+        //         // flip button을 눌렀을 때 state를 정반대의 값으로 바꿈
+        //         // console.log(flipped);
+        //     }
+
+        //     return (<div>
+        //         <h3>Super Converter</h3>
+        //         <div>
+        //             <label for="minutes">Minutes</label>
+        //             <input
+        //                 value={inverted ? amount * 60 : amount}
+        //                 id="minutes"
+        //                 placeholder="Minutes"
+        //                 type="number"
+        //                 onChange={onChange}
+        //                 disabled={inverted}
+        //             />
+        //         </div>
+
+        //         <div>
+        //             <label for="hours">Hours</label>
+        //             <input
+        //                 value={inverted ? amount : Math.floor(amount / 60)}
+        //                 id="hours"
+        //                 placeholder="hours"
+        //                 type="number"
+        //                 onChange={onChange}
+        //                 disabled={!inverted} // inverted가 false라면 disabled는 true가 됨
+        //             />
+        //         </div>
+        //         <button onClick={reset}>Reset</button>
+        //         <button onClick={onInvert}>{inverted ? "Turn back" : "Invert"}</button>
+        //     </div>);
+        // };
         const root = document.getElementById("root");
         ReactDOM.render(<App />, root);
     </script>
